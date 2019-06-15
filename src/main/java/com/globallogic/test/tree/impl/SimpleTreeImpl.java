@@ -288,7 +288,11 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         return count;
     }
 
-    private static class Node<T extends Comparable> {
+    protected Node<T> getRoot() {
+        return root;
+    }
+
+    protected static class Node<T extends Comparable> {
         T element;
         Node<T> leftChild;
         Node<T> rightChild;

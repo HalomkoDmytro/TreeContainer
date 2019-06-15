@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Extension to SimpleTreeImpl. Allowing to define max node quantity in Tree.
  */
-public class SimpleTreeLimitedSizeImpl extends SimpleTreeImpl {
+public class SimpleTreeLimitedSizeImpl<T extends Comparable> extends SimpleTreeImpl<T> {
 
     private int maxSize;
 
@@ -17,7 +17,7 @@ public class SimpleTreeLimitedSizeImpl extends SimpleTreeImpl {
     }
 
     @Override
-    public boolean add(Comparable element) {
+    public boolean add(T element) {
         Objects.requireNonNull(element);
 
         if (size() >= maxSize)
