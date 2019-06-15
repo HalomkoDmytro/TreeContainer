@@ -4,6 +4,9 @@ import com.globallogic.test.tree.Exceptions.SizeOverflow;
 
 import java.util.Objects;
 
+/**
+ * Extension to SimpleTreeImpl. Allowing to define max node quantity in Tree.
+ */
 public class SimpleTreeLimitedSizeImpl extends SimpleTreeImpl {
 
     private int maxSize;

@@ -8,13 +8,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * Basic implementation of Simple Tree Container. Store based on nodes.
+ * A node is implemented as inner static class {@link Node<T>}.
+ *
+ * @param <T> generic type parameter
+ */
 public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
     private int size;
     private Node<T> root;
 
     public SimpleTreeImpl() {
     }
-
 
     public SimpleTreeImpl(List<T> elements) {
         Objects.requireNonNull(elements);
@@ -54,7 +59,7 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         if (root.element == element) {
             listElementsToReplace = removeRootElement();
         } else {
-            if (removeNoteRootElement(element, listElementsToReplace)) return false;
+            if (!tryRemoveNoteRootElement(element, listElementsToReplace)) return false;
         }
 
         if (size > 1) {
@@ -67,6 +72,10 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         return true;
     }
 
+    /**
+     * Remove root element
+     * @return List of children's of root element
+     */
     private List<T> removeRootElement() {
         List<T> listElementsToReplace;
         listElementsToReplace = filter(x -> true);
@@ -75,15 +84,21 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         return listElementsToReplace;
     }
 
-    private boolean removeNoteRootElement(T element, List<T> listElementsToReplace) {
+    /**
+     * Try to remove note root element if exist
+     * @param element to remove
+     * @param listElementsToReplace to store leaves from removing element
+     * @return
+     */
+    private boolean tryRemoveNoteRootElement(T element, List<T> listElementsToReplace) {
         Node<T> nodeWithChildElement = findNodeWithChildLookingElement(root, element);
-        if (nodeWithChildElement == null) return true;
+        if (nodeWithChildElement == null) return false;
 
         removeNotRootNode(element, listElementsToReplace, nodeWithChildElement);
         if (!listElementsToReplace.isEmpty()) {
             listElementsToReplace.remove(0);
         }
-        return false;
+        return true;
     }
 
     private void removeNotRootNode(T element, List<T> listElementsToReplace, Node<T> nodeWithChildElement) {
@@ -99,6 +114,10 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         filterNode(childToRemove, x -> true, listElementsToReplace);
     }
 
+    /**
+     * Insert list of elements in Tree
+     * @param listElements
+     */
     private void insertListElements(List<T> listElements) {
         for (T el : listElements) {
             add(el);
@@ -125,6 +144,12 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         return lookingNode;
     }
 
+    /**
+     * Looking node with looking element on left or right child
+     * @param node to search on
+     * @param ChildElement looking value
+     * @return {@link Node<T>}
+     */
     private Node<T> findNodeWithChildLookingElement(Node<T> node, T ChildElement) {
         if (node == null) return null;
 
@@ -202,6 +227,12 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         return list;
     }
 
+    /**
+     * Store in list all matching to predicate elements.
+     * @param node to search on.
+     * @param predicate
+     * @param list to store elements.
+     */
     private void filterNode(Node<T> node, Predicate predicate, List list) {
         if (node == null) return;
 
@@ -213,7 +244,11 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         filterNode(node.rightChild, predicate, list);
     }
 
-
+    /**
+     * Add new child to Node
+     * @param node
+     * @param element
+     */
     private void insertInNode(Node node, T element) {
         if (node.element.compareTo(element) > 0) {
             if (node.leftChild != null) {
@@ -230,6 +265,11 @@ public class SimpleTreeImpl<T extends Comparable> implements SimpleTree<T> {
         }
     }
 
+    /**
+     * Count all elements on Tree.
+     * @param node
+     * @return
+     */
     private int countElements(Node node) {
         int count = 0;
 
